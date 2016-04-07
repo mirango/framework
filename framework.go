@@ -58,7 +58,21 @@ type Param interface {
 }
 type Params []Param
 type ParamValue interface {
+	Name() string
+	Value() interface{}
+	As() ValueType
+	Int() int
+	Int64() int64
+	Float() float32
+	Float64() float64
+	String() string
 	RawString() string
+	Bool() bool
+	IntE() (int, error)
+	Int64E() (int64, error)
+	FloatE() (float32, error)
+	Float64E() (float64, error)
+	BoolE() (bool, error)
 }
 type ParamValues map[string]ParamValue
 type Route interface {

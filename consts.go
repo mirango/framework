@@ -1,12 +1,15 @@
 package framework
 
+type ValueType int
+
 const (
-	TYPE_STRING = iota
+	TYPE_STRING ValueType = iota
 	TYPE_INT
 	TYPE_INT64
 	TYPE_FLOAT
 	TYPE_FLOAT64
 	TYPE_BOOL
+	TYPE_STRUCT
 
 	METHOD_GET    = "GET"
 	METHOD_POST   = "POST"
