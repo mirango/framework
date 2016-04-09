@@ -9,7 +9,7 @@ type Entry interface {
 }
 
 type EntryFormatter interface {
-	Format(Entry) string
+	Format(string, ...interface{}) string
 }
 
 type LogWriter interface {
