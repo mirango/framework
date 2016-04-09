@@ -26,15 +26,21 @@ func (r Renderers) Get(mimeType string) Renderer {
 	return nil
 }
 
-func (r *Renderers) Add(nr Renderer) {
+func (r *Renderers) Append(nr ...Renderer) {
 	if nr == nil {
 		return
 	}
-	for i, re := range *r {
-		if re.MimeType() == nr.MimeType() {
-			(*r)[i] = nr
-			return
+	for _, nre := range nr {
+		found := false
+		for i, re := range *r {
+			if re.MimeType() == nre.MimeType() {
+				(*r)[i] = nre
+				found = true
+				break
+			}
+		}
+		if !found {
+			*r = append(*r, nre)
 		}
 	}
-	*r = append(*r, nr)
 }
