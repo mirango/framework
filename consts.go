@@ -22,5 +22,6 @@ const (
 	MIME_HTML = "text/html"
 	MIME_XML  = "application/xml"
 	MIME_JSON = "application/json"
+	MIME_YAML = "application/x-yaml"
 
 )
