@@ -24,4 +24,8 @@ const (
 	MIME_JSON = "application/json"
 	MIME_YAML = "application/x-yaml"
 
+	HEADER_Accept                        = "Accept"
+	HEADER_ContentType                   = "Content-Type"
+	ENCODING_GZIP    = "gzip"
+	ENCODING_DEFLATE = "deflate"
 )
