@@ -13,11 +13,28 @@ type Server interface {
 	ListenAndServeTLS(string, string) error
 }
 
+type Error interface {
+	error
+	Code() int
+	Type() string
+	Name() string
+}
+
+type Config interface {
+	Get(string) Value
+}
+
 type Valuer interface {
 	Values() Values
 	SetValue(interface{}, interface{})
 	GetValue(interface{}) Value
 	Value(interface{}) interface{}
+}
+
+type ParamValuer interface {
+	Param(string) ParamValue
+	ParamOk(string) (ParamValue, bool)
+	Params(...string) ParamValues
 }
 
 type Context interface {
@@ -26,12 +43,9 @@ type Context interface {
 	Response
 	Valuer
 	Operation() Operation
-}
-
-type ParamValuer interface {
-	Param(string) ParamValue
-	ParamOk(string) (ParamValue, bool)
-	Params(...string) ParamValues
+	Locale() Locale
+	Id() int64
+	User() User
 }
 
 type Request interface {
@@ -41,6 +55,27 @@ type Request interface {
 	Method() string
 }
 
+type Response interface {
+	http.ResponseWriter
+	IsIndented() bool
+}
+
+type Operations interface {
+	Append(...Operation)
+	Set(...Operation)
+	Get() []Operation
+	GetByIndex(int) Operation
+	GetByName(string) Operation
+	Len() int
+}
+
+type ModelStore interface {
+	Get()
+	Create()
+	Edit()
+	Remove()
+}
+
 type Operation interface {
 	BuildPather
 	Route() Route
@@ -48,37 +83,71 @@ type Operation interface {
 	GetMethods() []string
 	GetPath() string
 	GetFullPath() string
+	// Param(string) Param
+	// Params(...string) Params
+	// BodyParam(string) Param
+	// BodyParams(...string) Params
+	// HeaderParam(string) Param
+	// HeaderParams(...string) Params
+	// PathParam(string) Param
+	// PathParams(...string) Params
+	// QueryParam(string) Param
+	// QueryParams(...string) Params
 }
 
-type Response interface {
-	http.ResponseWriter
-	IsIndented() bool
+type Resource interface {
+	Create(Context) interface{}
+	Retrieve(Context) interface{}
+	Update(Context) interface{}
+	Delete(Context) interface{}
 }
-type Param interface {
+
+type Values map[interface{}]interface{}
+
+func (vs *Values) Set(k interface{}, v interface{}) {
+	*vs[k] = v
 }
-type Params []Param
-type ParamValue interface {
-	Name() string
+
+func (vs *Values) Get(k interface{}) Value {
+	return &value{*vs[k]}
+}
+
+type Value interface {
 	Value() interface{}
-	As() ValueType
 	Int() int
 	Int64() int64
 	Float() float32
 	Float64() float64
 	String() string
-	RawString() string
 	Bool() bool
+}
+
+type Params []Param
+
+type Param interface {
+}
+
+type ParamValues map[string]ParamValue
+
+type ParamValue interface {
+	Value
+	Name() string
+	As() ValueType
+	RawString() string
 	IntE() (int, error)
 	Int64E() (int64, error)
 	FloatE() (float32, error)
 	Float64E() (float64, error)
 	BoolE() (bool, error)
 }
-type ParamValues map[string]ParamValue
+
+type BuildPather interface {
+	BuildPath(...interface{}) string
+}
+
 type Route interface {
 	BuildPather
 	Path() string
 	FullPath() string
 	SetPath(string)
 }
-
