@@ -2,7 +2,6 @@ package framework
 
 import (
 	"net/http"
-	"time"
 )
 
 type Server interface {
@@ -105,11 +104,11 @@ type Resource interface {
 type Values map[interface{}]interface{}
 
 func (vs *Values) Set(k interface{}, v interface{}) {
-	*vs[k] = v
+	(*vs)[k] = v
 }
 
 func (vs *Values) Get(k interface{}) Value {
-	return &value{*vs[k]}
+	return &value{(*vs)[k]}
 }
 
 type Value interface {

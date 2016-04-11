@@ -1,16 +1,12 @@
 package framework
 
-import (
-	"github.com/wlMalk/mirango/framework"
-)
-
 type value struct {
 	value interface{}
 }
 
-func NewValue(value interface{}) Value {
+func NewValue(v interface{}) Value {
 	return &value{
-		value: value,
+		value: v,
 	}
 }
 
