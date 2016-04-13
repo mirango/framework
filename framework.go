@@ -82,6 +82,12 @@ type Operation interface {
 	GetMethods() []string
 	GetPath() string
 	GetFullPath() string
+	GetSchemes() []string
+	GetAllSchemes() []string
+	GetAccepts() []string
+	GetAllAccepts() []string
+	GetReturns() []string
+	GetAllReturns() []string
 	// Param(string) Param
 	// Params(...string) Params
 	// BodyParam(string) Param
@@ -121,7 +127,10 @@ type Value interface {
 	Bool() bool
 }
 
-type Params []Param
+type Params interface {
+	ContainsFiles() bool
+	ContainsBodyParams() bool
+}
 
 type Param interface {
 }
@@ -146,7 +155,12 @@ type BuildPather interface {
 
 type Route interface {
 	BuildPather
-	Path() string
-	FullPath() string
-	SetPath(string)
+	GetPath() string
+	GetFullPath() string
+	GetSchemes() []string
+	GetAllSchemes() []string
+	GetAccepts() []string
+	GetAllAccepts() []string
+	GetReturns() []string
+	GetAllReturns() []string
 }
