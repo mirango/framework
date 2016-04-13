@@ -43,7 +43,7 @@ type Context interface {
 	Valuer
 	Operation() Operation
 	Locale() Locale
-	Id() int64
+	ID() int64
 	User() User
 }
 
