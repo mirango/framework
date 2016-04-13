@@ -6,45 +6,32 @@ import (
 
 type Sessioner interface {
 	Sessions() Sessions
-	Session(string) (Session, error)
+	Session(string) Session
 	SetSessionValue(string, interface{}, interface{}) error
 	GetSessionValue(string, interface{}) (Value, error)
 }
 
 type SessionStore interface {
-	SessionNames() []string
+	Names() []string
 	Get(*http.Request, string) (Session, error)
 	GetAll(*http.Request) (Sessions, error)
 	GetMany(*http.Request, ...string) (Sessions, error)
 	New(*http.Request, string) (Session, error)
-	Save(Response, Session) error
+	Save(*http.Request, http.ResponseWriter, Session) error
 }
 
 type Sessions []Session
 
-func (s Sessions) Get(name string) (Session, error) {
+func (s Sessions) Get(name string) Session {
 	for _, se := range s {
 		if se.Name() == name {
-			return se, nil
+			return se
 		}
 	}
-	return nil, nil
+	return nil
 }
 
-func (s *Sessions) Add(ns Session) {
-	if ns == nil {
-		return
-	}
-	for i, se := range *s {
-		if se.Name() == ns.Name() {
-			(*s)[i] = ns
-			return
-		}
-	}
-	*s = append(*s, ns)
-}
-
-func (s *Sessions) AddMany(nses ...Session) {
+func (s *Sessions) Append(nses ...Session) {
 	for _, ns := range nses {
 		if ns == nil {
 			continue
@@ -59,10 +46,13 @@ func (s *Sessions) AddMany(nses ...Session) {
 	}
 }
 
-func (s Sessions) Save(c Context) error {
+func (s Sessions) Save(r *http.Request, w http.ResponseWriter) error {
 	var err error
 	for _, se := range s {
-		err = se.Save(c)
+		if !se.Changed() {
+			continue
+		}
+		err = se.Save(r, w)
 		if err != nil {
 			return err
 		}
@@ -71,9 +61,16 @@ func (s Sessions) Save(c Context) error {
 }
 
 type Session interface {
+	Set(interface{}, interface{})
+	Get(interface{}) Value
+	GetOr(interface{}, interface{}) Value
+	Unset(interface{}) bool
+	ID() string
 	Flashes(vars ...string) []Value
 	AddFlash(value interface{}, vars ...string)
-	Save(Context) error
+	Save(*http.Request, http.ResponseWriter) error
 	Name() string
 	Store() SessionStore
+	Values() Values
+	Changed() bool
 }
