@@ -14,9 +14,11 @@ type Server interface {
 
 type Error interface {
 	error
-	Code() int
-	Type() string
-	Name() string
+	GetStatus() int
+	GetCode() string
+	GetType() string
+	GetMessage() string
+	Log(LogWriter)
 }
 
 type Config interface {
