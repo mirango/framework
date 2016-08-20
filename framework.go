@@ -123,7 +123,9 @@ type Value interface {
 	Value() interface{}
 	Int() int
 	Int64() int64
-	Float() float32
+	Uint() uint
+	Uint64() uint64
+	Float32() float32
 	Float64() float64
 	String() string
 	Bool() bool
@@ -146,7 +148,9 @@ type ParamValue interface {
 	RawString() string
 	IntE() (int, error)
 	Int64E() (int64, error)
-	FloatE() (float32, error)
+	UintE() (uint, error)
+	Uint64E() (uint64, error)
+	Float32E() (float32, error)
 	Float64E() (float64, error)
 	BoolE() (bool, error)
 }
