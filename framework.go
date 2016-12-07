@@ -79,17 +79,14 @@ type ModelStore interface {
 
 type Operation interface {
 	BuildPather
-	Route() Route
+	GetRoute() Route
 	GetName() string
 	GetMethods() []string
 	GetPath() string
 	GetFullPath() string
 	GetSchemes() []string
-	GetAllSchemes() []string
 	GetAccepts() []string
-	GetAllAccepts() []string
 	GetReturns() []string
-	GetAllReturns() []string
 	// Param(string) Param
 	// Params(...string) Params
 	// BodyParam(string) Param
@@ -164,9 +161,6 @@ type Route interface {
 	GetPath() string
 	GetFullPath() string
 	GetSchemes() []string
-	GetAllSchemes() []string
 	GetAccepts() []string
-	GetAllAccepts() []string
 	GetReturns() []string
-	GetAllReturns() []string
 }
