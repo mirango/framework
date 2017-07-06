@@ -34,7 +34,7 @@ type Valuer interface {
 
 type ParamValuer interface {
 	Param(string) ParamValue
-	ParamOk(string) (ParamValue, bool)
+	IsSet(string) bool
 	Params(...string) ParamValues
 }
 
@@ -136,7 +136,20 @@ type Params interface {
 type Param interface {
 }
 
-type ParamValues map[string]ParamValue
+type ParamValues []ParamValue
+
+func (pv *ParamValues) Append(v ...ParamValue) {
+	*pv = append(*pv, v...)
+}
+
+func (pv *ParamValues) Get(name string) ParamValue {
+	for _, v := range *pv {
+		if v.Name() == name {
+			return v
+		}
+	}
+	return nil
+}
 
 type ParamValue interface {
 	Value
