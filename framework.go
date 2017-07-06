@@ -58,7 +58,6 @@ type Request interface {
 
 type Response interface {
 	http.ResponseWriter
-	IsIndented() bool
 }
 
 type Operations interface {
